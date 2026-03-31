@@ -9,10 +9,24 @@
 
 We want to start with the most important things. The main things is making sure your pet is getting walked, fed, and taking any medicine they need. They need to be able to schedule all of these. Obviously they will also need to be able to add their pets and ad these tasks per pet. They need to be able to see the tasks for the day in a simple format. 
 
+We ended up making classes for Task, Owner, Pet, and DailyPlan. This will allow for all of the basic things I identified as necessary for an MVP.
+Task is simply a class for the things associated for the task you must do with your pet. Owner is a profile of sorts that we created to assign pets to and then assign tasks via the pet. DailyPlan allows for a view of all of the tasks, kind of like a dashboard. 
+
 **b. Design changes**
 
 - Did your design change during implementation?
+
+Summary of suggested additions:
+
+Where:	     What to add:
+Task	    pet: Pet back-reference (or pet_name: str)
+Task	    due_days: list[str] for weekly recurrence
+DailyPlan	tie-breaking rule doc/comment on generate()
+DailyPlan	consider total_duration_minutes as @property
+
 - If yes, describe at least one change and why you made it.
+
+Yes. In the initial UML, `Task` had no reference to the pet it belonged to. During review we realized that when `DailyPlan.generate()` collects tasks from all pets and flattens them into a single list, the pet context is lost — you could no longer display something like "Walk Buddy." We added a `pet_name` attribute to `Task` that gets set automatically when a task is added to a `Pet`, so the plan can display each task with its pet's name without needing to trace back through the object graph.
 
 ---
 
