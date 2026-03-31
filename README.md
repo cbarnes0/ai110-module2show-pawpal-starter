@@ -42,7 +42,7 @@ pip install -r requirements.txt
 6. Connect your logic to the Streamlit UI in `app.py`.
 7. Refine UML so it matches what you actually built.
 
-### Smarter Scheduling
+## Smarter Scheduling
 
 The scheduler goes beyond a basic to-do list with a few key upgrades:
 
@@ -52,3 +52,25 @@ The scheduler goes beyond a basic to-do list with a few key upgrades:
 - **Skipped tasks** — if your time budget runs out, the plan tells you what got dropped instead of silently leaving it out
 - **Conflict detection** — if the same type of task is scheduled twice for the same pet in the same time slot, the plan flags it as a conflict
 - **Override** — any task can be forced into today's plan with `override_today=True`, even if it's weekly or as-needed
+
+## Testing PawPal+
+
+### Run the tests
+
+```bash
+python -m pytest tests/test_pawpal.py -v
+```
+
+### What the tests cover
+
+17 tests across five areas:
+
+- **Budget enforcement** — tasks that exceed the daily time limit land in skipped, not silently disappear; a task that fits exactly on the budget line is always scheduled
+- **Sorting correctness** — tasks added in any order come out morning → afternoon → evening; `sort_order` controls sequencing within a slot
+- **Recurrence logic** — marking a daily or weekly task complete automatically creates a fresh incomplete copy with the same properties; `as_needed` tasks do not auto-queue
+- **Conflict detection** — duplicate task types for the same pet in the same time slot are flagged with the pet name and slot in the message; same type across different slots is not a conflict
+- **Edge cases** — owner with no pets, pet with no tasks, weekly task with no days configured, `as_needed` with and without override
+
+### Confidence level
+
+⭐⭐⭐⭐ (4/5)
